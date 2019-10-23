@@ -1,4 +1,4 @@
-package main // import "github.com/thraxil/mediacheck"
+package main // import "github.com/ccnmtl/mediacheck"
 
 import (
 	"crypto/tls"
