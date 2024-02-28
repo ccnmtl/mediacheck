@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 	"golang.org/x/net/html"
 )
@@ -121,6 +121,17 @@ func main() {
 	}
 }
 
+func NewRequestWithUserAgent(method, url, userAgent string) (*http.Request, error) {
+	req, err := http.NewRequest(method, url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("User-Agent", userAgent)
+
+	return req, nil
+}
+
 func fetchURL(ctx context.Context, u *url.URL) (string, []byte, error) {
 	tr := &http.Transport{}
 	if !verifySSL {
@@ -133,7 +144,7 @@ func fetchURL(ctx context.Context, u *url.URL) (string, []byte, error) {
 		r   *http.Response
 		err error
 	}, 1)
-	req, err := http.NewRequest("GET", u.String(), nil)
+	req, err := NewRequestWithUserAgent("GET", u.String(), "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
 	if err != nil {
 		return "", nil, err
 	}
@@ -254,7 +265,8 @@ func checkMedia(ctx context.Context, u *url.URL) error {
 		r   *http.Response
 		err error
 	}, 1)
-	req, err := http.NewRequest("GET", u.String(), nil)
+
+	req, err := NewRequestWithUserAgent("GET", u.String(), "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
 	if err != nil {
 		return err
 	}
