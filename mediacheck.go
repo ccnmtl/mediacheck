@@ -121,7 +121,7 @@ func main() {
 	}
 }
 
-func NewRequestWithUserAgent(method, url, userAgent string) (*http.Request, error) {
+func newRequestWithUserAgent(method, url, userAgent string) (*http.Request, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return nil, err
@@ -144,7 +144,7 @@ func fetchURL(ctx context.Context, u *url.URL) (string, []byte, error) {
 		r   *http.Response
 		err error
 	}, 1)
-	req, err := NewRequestWithUserAgent("GET", u.String(), "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
+	req, err := newRequestWithUserAgent("GET", u.String(), "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
 	if err != nil {
 		return "", nil, err
 	}
@@ -266,7 +266,7 @@ func checkMedia(ctx context.Context, u *url.URL) error {
 		err error
 	}, 1)
 
-	req, err := NewRequestWithUserAgent("GET", u.String(), "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
+	req, err := newRequestWithUserAgent("GET", u.String(), "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
 	if err != nil {
 		return err
 	}
