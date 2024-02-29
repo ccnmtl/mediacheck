@@ -6,6 +6,11 @@ fail if any are not fetchable, if any take more than a specified
 timeout to fetch, if any of them have SSL issues, or if there are
 HTTP/HTTPS mixed content issues.
 
+## Go Version
+This project has recently been updated to use golang version 1.22.0 (see go.mod)
+
+## Installation
+Run `go mod download` to install all the dependencies for this project.
 
 ## Usage
 
