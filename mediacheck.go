@@ -205,23 +205,15 @@ func getMediaURL(n *html.Node) (bool, *url.URL) {
 	if n.Type != html.ElementNode {
 		return false, nil
 	}
-	switch {
-	case n.Data == "img":
+
+	switch n.Data {
+	case "img", "script", "video", "source", "track", "iframe":
 		return getElementSrc(n)
-	case n.Data == "link":
+	case "link":
 		return getElementHref(n)
-	case n.Data == "script":
-		return getElementSrc(n)
-	case n.Data == "video":
-		return getElementSrc(n)
-	case n.Data == "source":
-		return getElementSrc(n)
-	case n.Data == "track":
-		return getElementSrc(n)
-	case n.Data == "iframe":
-		return getElementSrc(n)
+	default:
+		return false, nil
 	}
-	return false, nil
 }
 
 func getElementSrc(n *html.Node) (bool, *url.URL) {
@@ -229,12 +221,22 @@ func getElementSrc(n *html.Node) (bool, *url.URL) {
 }
 
 func getElementHref(n *html.Node) (bool, *url.URL) {
-	found, rel := getElementAttr(n, "rel")
-	if found && rel.String() == "canonical" {
-		// <link rel="canonical" ..> elements should be ignored
+	rel := strings.ToLower(strings.TrimSpace(getAttr(n, "rel")))
+	switch rel {
+	case "canonical", "search", "alternate", "preconnect", "dns-prefetch", "manifest":
 		return false, nil
 	}
+
 	return getElementAttr(n, "href")
+}
+
+func getAttr(n *html.Node, key string) string {
+	for _, a := range n.Attr {
+		if a.Key == key {
+			return a.Val
+		}
+	}
+	return ""
 }
 
 func getElementAttr(n *html.Node, key string) (bool, *url.URL) {
