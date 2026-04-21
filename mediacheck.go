@@ -174,8 +174,6 @@ func fetchURL(ctx context.Context, u *url.URL) (string, []byte, error) {
 		b, _ := ioutil.ReadAll(resp.Body)
 		return resp.Status, b, nil
 	}
-	// should never actually reach here
-	return "", nil, nil
 }
 
 func extractMedia(s string) []*url.URL {
@@ -297,6 +295,4 @@ func checkMedia(ctx context.Context, u *url.URL) error {
 		}
 		return nil
 	}
-	// should never actually reach here
-	return nil
 }
